@@ -1,0 +1,18 @@
+- hosts: web
+  become: yes
+
+  tasks:
+    - name: Install nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Deploy form
+      copy:
+        dest: /var/www/html/index.html
+        content: |
+          <form action="http://{{ hostvars['app'][0]['inventory_hostname'] }}/submit.php" method="post">
+            Name: <input type="text" name="name">
+            <input type="submit">
+          </form>
